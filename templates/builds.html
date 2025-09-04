@@ -11,12 +11,29 @@
 
     <h1>Página de Builds</h1>
 
-    <h2>Lista de Armas</h2>
-    <ul>
-    {% for arma in armas %}
-        <li>{{ arma.name }}</li>
-    {% endfor %}
-    </ul>
+    <form action="/salvar_build" method="post">
+        <!-- Barra de pesquisa para Warframe -->
+         <label for="warframe-search">Pesquisar warframe-search</label>
+         <input type="text" name="warframe-search" id="warframe-search">
 
+        <!-- Barra de pesquisa para Armas primárias -->
+        <label for="primary-search">Pesquisar Armas primárias</label>
+        <input type="text" name="primary-search" id="primary-search">
+
+        <!-- Barra de pesquisa para Armas secundárias -->
+         <label for="secondary-search">Pesquisar Armas secundárias</label>
+         <input type="text" name="secondary-search" id="secondary-search">
+
+        <!-- Barra de pesquisa para Armas corpo a corpo -->
+         <label for="melee-search">Pesquisar armas melee</label>
+         <input type="text" name="melee-search id="melee-search> 
+
+        <!-- Barra de pesquisa para companheiros --> 
+        <label for="companion-search">Pesquisar companheiros</label>
+        <input type="text" name="companion-search" id="companion-search"> 
+
+        <button type"submit">Salvar build</button>
+    </form>
+    
 </body>
 </html>
