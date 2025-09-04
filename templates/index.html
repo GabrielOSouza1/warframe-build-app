@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warframe Build App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Bem-vindo ao Warframe Build App</h1>
+    <p>Aqui você poderá criar e compartilhar builds com a comunidade.</p>
+    
+    <h2>Lista de Warframes</h2>
+    <ul>
+    {% for warframe in warframes %}
+        <li>{{ warframe.name }}</li>
+    {% endfor %}
+    </ul>
+    
+    <a href="{{ url_for('builds') }}">Ver Builds</a>
+</body>
+</html>
