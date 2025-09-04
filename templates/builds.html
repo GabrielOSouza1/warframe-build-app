@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warframe Build App - Builds</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    
+</head>
+<body>
     <p>Aqui você verá e criará as builds.</p>
+
+    <h1>Página de Builds</h1>
+
+    <h2>Lista de Armas</h2>
+    <ul>
+    {% for arma in armas %}
+        <li>{{ arma.name }}</li>
+    {% endfor %}
+    </ul>
+
 </body>
 </html>

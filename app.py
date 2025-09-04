@@ -7,6 +7,16 @@ app = Flask(__name__)
 # URL base da API Warframe (atualizada)
 BASE_URL = "https://api.warframestat.us/warframes"
 
+def obter_armas(idioma='pt'):
+    try:
+        response = requests.get("https://api.warframestat.us/weapons", params={'language': idioma})
+        response.raise_for_status()  # Lança um erro para status de resposta ruins (4xx ou 5xx)
+        return response.json()  # Retorna os dados em formato JSON
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao obter dados: {e}")
+        return None
+
+
 # Função para obter dados dos Warframes
 def obter_warframes(idioma='pt'):
     try:
@@ -21,6 +31,7 @@ def obter_warframes(idioma='pt'):
 @app.route('/')
 def home():
     warframes = obter_warframes()
+    
     if warframes:
         return render_template('index.html', warframes=warframes)
     else:
@@ -29,7 +40,13 @@ def home():
 # Definir a rota para a página de builds
 @app.route('/builds')
 def builds():
-    return render_template('builds.html')
+
+    armas = obter_armas()
+    if armas:
+        return render_template('builds.html', armas=armas)
+    else:
+        return "Erro ao carregar dados da API."
+    
 
 # Iniciar o servidor
 if __name__ == '__main__':
