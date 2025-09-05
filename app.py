@@ -5,16 +5,32 @@ import requests
 app = Flask(__name__)
 
 # URL base da API Warframe (atualizada)
-BASE_URL = "https://api.warframestat.us/warframes"
+BASE_URL = "https://api.warframestat.us/"
 
-def obter_armas(idioma='pt'):
+def obter_armas_e_companheiros(idioma='pt'):
+   def obter_armas_e_companheiros(idioma='pt'):
     try:
-        response = requests.get("https://api.warframestat.us/weapons", params={'language': idioma})
-        response.raise_for_status()  # Lança um erro para status de resposta ruins (4xx ou 5xx)
-        return response.json()  # Retorna os dados em formato JSON
+        armas_response = requests.get(f"{BASE_URL}/Armas", params={'language': idioma})
+        companheiros_response = requests.get(f"{BASE_URL}/Companheiros", params={'language': idioma})
+
+        armas = armas_response.json()
+        companheiros = companheiros_response.json()
+
+        primarias = [arma for arma in armas if arma.get('category') == 'Primary']
+        secundarias = [arma for arma in armas if arma.get('category') == 'Secondary']
+        melees = [arma for arma in armas if arma.get('category') == 'Melee']
+
+        return {
+            'Primarias': primarias,
+            'Secundarias': secundarias,
+            'Melees': melees,
+            'Companheiros': companheiros,
+        }
+
     except requests.exceptions.RequestException as e:
         print(f"Erro ao obter dados: {e}")
         return None
+
 
 
 # Função para obter dados dos Warframes
@@ -36,11 +52,18 @@ def home():
 @app.route('/builds')
 def builds():
     warframes = obter_warframes()
-    armas = obter_armas()
+    armas = obter_armas_e_companheiros()
 
 
-    if armas and warframes:
-        return render_template('builds.html', armas=armas, warframes=warframes)
+    if obter_warframes and obter_armas_e_companheiros:
+        return render_template(
+            'builds.html',
+            warframes= obter_warframes,
+            primarias= obter_armas_e_companheiros['primarias'],
+            secundarias= obter_armas_e_companheiros['secundarias'],
+            melees= obter_armas_e_companheiros['melees'],
+            companheiros= obter_armas_e_companheiros['companheiros']
+        )
     else:
         return "Erro ao carregar dados da API."
     
