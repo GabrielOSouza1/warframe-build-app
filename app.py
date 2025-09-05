@@ -30,20 +30,17 @@ def obter_warframes(idioma='pt'):
 # Definir a rota para a página inicial
 @app.route('/')
 def home():
-    warframes = obter_warframes()
+     return render_template('index.html',)
     
-    if warframes:
-        return render_template('index.html', warframes=warframes)
-    else:
-        return "Erro ao carregar dados da API."
-
 # Definir a rota para a página de builds
 @app.route('/builds')
 def builds():
-
+    warframes = obter_warframes()
     armas = obter_armas()
-    if armas:
-        return render_template('builds.html', armas=armas)
+
+
+    if armas and warframes:
+        return render_template('builds.html', armas=armas, warframes=warframes)
     else:
         return "Erro ao carregar dados da API."
     
