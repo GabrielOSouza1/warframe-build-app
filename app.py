@@ -1,73 +1,56 @@
 from flask import Flask, render_template
 import requests
 
-# Criar uma instância do aplicativo Flask
 app = Flask(__name__)
+BASE_URL = "https://api.warframestat.us"
 
-# URL base da API Warframe (atualizada)
-BASE_URL = "https://api.warframestat.us/"
-
-def obter_armas_e_companheiros(idioma='pt'):
-   def obter_armas_e_companheiros(idioma='pt'):
+def obter_armas_e_companheiros():
     try:
-        armas_response = requests.get(f"{BASE_URL}/Armas", params={'language': idioma})
-        companheiros_response = requests.get(f"{BASE_URL}/Companheiros", params={'language': idioma})
+        armas = requests.get(f"{BASE_URL}/weapons").json()
+        companheiros = requests.get(f"{BASE_URL}/companions").json()
 
-        armas = armas_response.json()
-        companheiros = companheiros_response.json()
-
-        primarias = [arma for arma in armas if arma.get('category') == 'Primary']
-        secundarias = [arma for arma in armas if arma.get('category') == 'Secondary']
-        melees = [arma for arma in armas if arma.get('category') == 'Melee']
+        primarias = [a for a in armas if a.get('category') == 'Primary']
+        secundarias = [a for a in armas if a.get('category') == 'Secondary']
+        melees = [a for a in armas if a.get('category') == 'Melee']
 
         return {
-            'Primarias': primarias,
-            'Secundarias': secundarias,
-            'Melees': melees,
-            'Companheiros': companheiros,
+            'primarias': primarias,
+            'secundarias': secundarias,
+            'melees': melees,
+            'companheiros': companheiros
         }
 
-    except requests.exceptions.RequestException as e:
-        print(f"Erro ao obter dados: {e}")
+    except Exception as e:
+        print("Erro ao obter armas e companheiros:", e)
         return None
 
-
-
-# Função para obter dados dos Warframes
-def obter_warframes(idioma='pt'):
+def obter_warframes():
     try:
-        response = requests.get(BASE_URL, params={'language': idioma})
-        response.raise_for_status()  # Lança um erro para status de resposta ruins (4xx ou 5xx)
-        return response.json()  # Retorna os dados em formato JSON
-    except requests.exceptions.RequestException as e:
-        print(f"Erro ao obter dados: {e}")
+        return requests.get(f"{BASE_URL}/warframes").json()
+    except Exception as e:
+        print("Erro ao obter warframes:", e)
         return None
 
-# Definir a rota para a página inicial
-@app.route('/')
-def home():
-     return render_template('index.html',)
-    
-# Definir a rota para a página de builds
 @app.route('/builds')
 def builds():
     warframes = obter_warframes()
     armas = obter_armas_e_companheiros()
 
-
-    if obter_warframes and obter_armas_e_companheiros:
+    if warframes and armas:
         return render_template(
             'builds.html',
-            warframes= obter_warframes,
-            primarias= obter_armas_e_companheiros['primarias'],
-            secundarias= obter_armas_e_companheiros['secundarias'],
-            melees= obter_armas_e_companheiros['melees'],
-            companheiros= obter_armas_e_companheiros['companheiros']
+            warframes=warframes,
+            primarias=armas['primarias'],
+            secundarias=armas['secundarias'],
+            melees=armas['melees'],
+            companheiros=armas['companheiros']
         )
     else:
         return "Erro ao carregar dados da API."
-    
 
-# Iniciar o servidor
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

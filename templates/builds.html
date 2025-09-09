@@ -13,24 +13,29 @@
 
     <form action="/salvar_build" method="post">
         <!-- Barra de pesquisa para Warframe -->
-         <label for="warframe-search">Pesquisar warframe-search</label>
+         <label for="warframe-search">Pesquisar warframe</label>
          <input type="text" name="warframe-search" id="warframe-search">
+         <ul id="warframe-results"></ul>
 
         <!-- Barra de pesquisa para Armas primárias -->
         <label for="primary-search">Pesquisar Armas primárias</label>
         <input type="text" name="primary-search" id="primary-search">
+        <ul id="primary-results"></ul>
 
         <!-- Barra de pesquisa para Armas secundárias -->
          <label for="secondary-search">Pesquisar Armas secundárias</label>
          <input type="text" name="secondary-search" id="secondary-search">
+         <ul id="secondary-results"></ul>
 
         <!-- Barra de pesquisa para Armas corpo a corpo -->
          <label for="melee-search">Pesquisar armas melee</label>
          <input type="text" name="melee-search id="melee-search> 
+         <ul id="melee-results"></ul>
 
         <!-- Barra de pesquisa para companheiros --> 
         <label for="companion-search">Pesquisar companheiros</label>
-        <input type="text" name="companion-search" id="companion-search"> 
+        <input type="text" name="companion-search" id="companion-search">
+        <ul id="companion-results"></ul>
 
         <button type"submit">Salvar build</button>
     </form>
